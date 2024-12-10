@@ -67,4 +67,19 @@ class SbbApplicationTests {
 		q.setSubject("수정된 제목");
 		this.questionRepository.save(q);
 	}
+	@Test
+	void testEntityDelete(){
+		assertEquals(2, questionRepository.count());
+		//현재 데이터베이스의 개수
+		Optional<Question> oq = questionRepository.findById(1);
+		//데이터베이스의 id가 1이 있으면 대입
+		assertTrue(oq.isPresent());
+		//만약 oq의 데이터가 있으면 true하고 테스트 계속
+		Question q = oq.get();
+		//oq데이터를 q에 대입
+		questionRepository.delete(q);
+		//oq의 값을 가진 q의 id를 갖고있는 데이터를 삭제
+		assertEquals(1, questionRepository.count());
+		//데이터가 1개가 됐다면 테스트 종료
+	}
 }
