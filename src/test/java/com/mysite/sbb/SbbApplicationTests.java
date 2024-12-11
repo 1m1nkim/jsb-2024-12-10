@@ -1,5 +1,6 @@
 package com.mysite.sbb;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,9 @@ class SbbApplicationTests {
 
 	@Autowired
 	private QuestionRepository questionRepository;
+
+	@Autowired
+	private AnswerRepository answerRepository;
 //	@Test
 //	void testJpaMake() {
 //		Question q1 = new Question();
@@ -81,5 +85,40 @@ class SbbApplicationTests {
 		//oq의 값을 가진 q의 id를 갖고있는 데이터를 삭제
 		assertEquals(1, questionRepository.count());
 		//데이터가 1개가 됐다면 테스트 종료
+	}
+
+	@Test
+	void testAnswerAdd(){
+		Optional<Question> oq = questionRepository.findById(2);
+		assertTrue(oq.isPresent());
+		Question q = oq.get();
+
+		Answer a = new Answer();
+		a.setContent("네 자동으로 생성됩니다.");
+		a.setQuestion(q);
+		a.setCreateDate(LocalDateTime.now());
+		answerRepository.save(a);
+	}
+
+	@Test
+	void testAnswerFind(){
+		Optional<Answer> oa = this.answerRepository.findById(1);
+		assertTrue(oa.isPresent());
+		Answer a = oa.get();
+		assertEquals(2, a.getQuestion().getId());
+	}
+
+	@Test
+	@Transactional
+	void testAnswerQuestFind(){
+		Optional<Question> oq = this.questionRepository.findById(2);
+		assertTrue(oq.isPresent());
+		Question q = oq.get();
+
+		List<Answer> answerList = q.getAnswerList();
+
+		assertEquals(1, answerList.size());
+		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+
 	}
 }
