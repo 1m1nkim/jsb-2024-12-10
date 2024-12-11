@@ -17,7 +17,7 @@ public class QuestionService {
     }
 
     public Question getQuestion(Integer id){
-        Optional<Question> question = questionRepository.findById(1);
+        Optional<Question> question = questionRepository.findById(id);
 
         if(question.isPresent()){
             return question.get();
