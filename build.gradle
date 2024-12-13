@@ -49,3 +49,7 @@ processResources {
 		include '**/*.html'
 	}
 }
+
+tasks.withType(ProcessResources) {
+	from 'src/main/resources/templates'
+}
