@@ -42,4 +42,31 @@ class SbbApplicationTests {
         Question q = all.get(0);
         assertEquals("sbb가 무엇인가요?", q.getSubject());
     }
+
+    @Test
+    void findOq(){
+        Optional<Question> oq = questionRepository.findById(1);
+        if(oq.isPresent()){
+            Question q = oq.get();
+            assertEquals("sbb가 무엇인가요?", q.getSubject());
+        }
+    }
+    @Test
+    void findBySubject(){
+        Question q = questionRepository.findBySubject("sbb가 무엇인가요?");
+        assertEquals(1, q.getId());
+    }
+
+    @Test
+    void findBySubjectAndContent(){
+        Question q = questionRepository.findBySubjectAndContent("sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.");
+        assertEquals(1, q.getId());
+    }
+
+    @Test
+    void findBySubjectLike(){
+        List<Question> qList = questionRepository.findBySubjectLike("sbb%");
+        Question q = qList.get(0);
+        assertEquals("sbb가 무엇인가요?", q.getSubject());
+    }
 }
