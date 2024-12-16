@@ -1,5 +1,7 @@
 package com.mysite.sbb;
 
+import com.mysite.sbb.answer.Answer;
+import com.mysite.sbb.answer.AnswerRepository;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
 import jakarta.transaction.Transactional;
@@ -18,6 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SbbApplicationTests {
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Test
     void testJpa(){
@@ -83,5 +88,41 @@ class SbbApplicationTests {
         assertTrue(oq.isPresent());
         Question q = oq.get();
         questionRepository.delete(q);
+    }
+
+    @Test
+    void testAddAnswer(){
+        Optional<Question> oq = questionRepository.findById(2);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+
+        Answer a = new Answer();
+        a.setContent("네 자동으로 생성됩니다.");
+        a.setQuestion(q);
+        //answer 내부에 question을 생성해두는 거
+        a.setCreateDate(LocalDateTime.now());
+        answerRepository.save(a);
+    }
+
+    @Test
+    void answerToQuestion(){
+        Optional<Answer> oa = answerRepository.findById(1);
+        assertTrue(oa.isPresent());
+        Answer a = oa.get();
+        assertEquals(2, a.getQuestion().getId());
+        //질문에서 답변 찾아오기
+    }
+
+    @Test
+    @Transactional
+    void questionToAnswer(){
+        Optional<Question> oq = this.questionRepository.findById(2);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+
+        List<Answer> answerList = q.getAnswerList();
+
+        assertEquals(1, answerList.size());
+        assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
     }
 }
