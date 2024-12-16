@@ -8,19 +8,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/question")
 public class QuestionController {
 
     private final QuestionService questionService;
 
     @GetMapping("/")
     public String root(){
-        return "redirect:/question/list";
+        return "redirect:/list";
     }
 
     @GetMapping("/sbb")
@@ -28,7 +30,7 @@ public class QuestionController {
     public String index(){
         return "index";
     }
-    @GetMapping("/question/list")
+    @GetMapping("/list")
     public String list(Model model){
         List<Question> questionList = questionService.getList();
         model.addAttribute("questionList", questionList);
@@ -36,8 +38,10 @@ public class QuestionController {
         return "question_list";
     }
 
-    @GetMapping("/question/detail/{id}")
-    public String detial(Model model, @PathVariable("id") Integer id){
+    @GetMapping("/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Question question = questionService.getQuestion(id);
+        model.addAttribute("question", question);
         return "question_detail";
     }
 }
