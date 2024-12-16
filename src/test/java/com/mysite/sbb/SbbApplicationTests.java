@@ -77,4 +77,11 @@ class SbbApplicationTests {
         q.setSubject("수정된 제목");
         questionRepository.save(q);
     }
+    @Test
+    void deleteTest(){
+        Optional<Question> oq = questionRepository.findById(1);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+        questionRepository.delete(q);
+    }
 }
