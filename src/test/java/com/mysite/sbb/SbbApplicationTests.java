@@ -69,4 +69,12 @@ class SbbApplicationTests {
         Question q = qList.get(0);
         assertEquals("sbb가 무엇인가요?", q.getSubject());
     }
+    @Test
+    void modifyTest(){
+        Optional<Question> oq = questionRepository.findById(1);
+        assertTrue(oq.isPresent());
+        Question q = oq.get();
+        q.setSubject("수정된 제목");
+        questionRepository.save(q);
+    }
 }
