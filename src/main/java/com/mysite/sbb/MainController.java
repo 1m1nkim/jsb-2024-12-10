@@ -10,4 +10,8 @@ public class MainController {
     public void index(){
 
     }
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/question/list";
+    }
 }
