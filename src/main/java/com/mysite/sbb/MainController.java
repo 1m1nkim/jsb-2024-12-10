@@ -6,4 +6,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
+    @GetMapping("/sbb")
+    public void index(){
+
+    }
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/question/list";
+    }
 }
